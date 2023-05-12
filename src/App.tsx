@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"; 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+
 // import { getAnalytics } from "firebase/analytics";
 
 import './App.css';
@@ -17,6 +19,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
+
+const auth = getAuth();
+
+function createUser() {
+createUserWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+    // ..
+  });
+}
+
+function signIn() {
+  signInWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+}
 
 async function addData() {
   // console.log(db);
@@ -44,6 +77,8 @@ function App() {
     <div>
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
+      <button onClick={createUser}>create user</button>
+      <button onClick={signIn}>sign in</button>
     </div>
   );
 }
