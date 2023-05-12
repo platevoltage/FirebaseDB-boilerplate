@@ -1,12 +1,13 @@
 import { useState } from 'react'; 
 import { initializeApp } from "firebase/app";
 import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"; 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import Login from "./components/Login";
 
 // import { getAnalytics } from "firebase/analytics";
 
 import './App.css';
+import JobList from './components/JobList';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjBwVlOOdgvoqrQQmN8yJn5pvbx14uJ44",
@@ -43,7 +44,7 @@ async function addData() {
 
 function App() {
   const [ showLogin, setShowLogin ] = useState(false);
-  const [ data, setData ] = useState("");
+  const [ data, setData ] = useState({});
 
   async function getData() {
     try {
@@ -52,7 +53,7 @@ function App() {
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
         array.push(doc.data());
-        setData(JSON.stringify(array, null, 2));
+        setData(array);
       });
     } 
     catch (e: any) {
@@ -76,7 +77,7 @@ function App() {
 
       <br></br>
       <br></br>
-      <pre>{data}</pre>
+      <JobList data={data} />
     </div>
   );
 }
