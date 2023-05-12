@@ -42,12 +42,14 @@ async function addData() {
 
 function App() {
   const [ showLogin, setShowLogin ] = useState(false);
+  const [ data, setData ] = useState("");
 
   async function getData() {
     try {
       const querySnapshot = await getDocs(collection(db, "users"));
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        setData(JSON.stringify(doc.data(), null, 2));
       });
     } 
     catch (e: any) {
@@ -67,6 +69,11 @@ function App() {
       {/* <button onClick={createUser}>create user</button> */}
       {/* <button onClick={signIn}>sign in</button> */}
       { showLogin && <Login auth={auth} setShowLogin={setShowLogin}/>}
+
+
+      <br></br>
+      <br></br>
+      <pre>{data}</pre>
     </div>
   );
 }
