@@ -28,7 +28,8 @@ async function addData() {
   // console.log(db);
   try {
     const docRef = await addDoc(collection(db, "invoices"), {
-      client: "Client 1",
+      client: "Client 2",
+      date: new Date(),
       bill: 100.00
     });
     console.log("Document written with ID: ", docRef.id);
@@ -46,10 +47,12 @@ function App() {
 
   async function getData() {
     try {
-      const querySnapshot = await getDocs(collection(db, "users"));
+      const querySnapshot = await getDocs(collection(db, "invoices"));
+      const array: object[] = [];
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-        setData(JSON.stringify(doc.data(), null, 2));
+        array.push(doc.data());
+        setData(JSON.stringify(array, null, 2));
       });
     } 
     catch (e: any) {
