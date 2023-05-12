@@ -22,33 +22,19 @@ const db = getFirestore(app);
 
 const auth = getAuth();
 
-function createUser() {
-createUserWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
-  .then((userCredential) => {
-    // Signed in 
+
+async function signIn() {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
     const user = userCredential.user;
     console.log(user);
-    // ...
-  })
-  .catch((error) => {
+  }
+  catch (error: any) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log(errorCode, errorMessage);
-    // ..
-  });
-}
+    console.error(errorCode, errorMessage)
+  }
 
-function signIn() {
-  signInWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
 }
 
 async function addData() {
@@ -77,10 +63,28 @@ function App() {
     <div>
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
-      <button onClick={createUser}>create user</button>
+      {/* <button onClick={createUser}>create user</button> */}
       <button onClick={signIn}>sign in</button>
     </div>
   );
 }
 
 export default App;
+
+
+
+// function createUser() {
+// createUserWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
+//   .then((userCredential) => {
+//     // Signed in 
+//     const user = userCredential.user;
+//     console.log(user);
+//     // ...
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     console.log(errorCode, errorMessage);
+//     // ..
+//   });
+// }
