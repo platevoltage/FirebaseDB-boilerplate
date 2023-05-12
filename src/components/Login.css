@@ -1,0 +1,23 @@
+#login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000088;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+#login {
+    border: 1px solid #ffffff;
+    background-color: #282c34;
+    position: relative;
+    width: 50%;
+    margin-top: 2em;
+    height: 20em;
+    /* display: flex;
+    justify-content: center; */
+}

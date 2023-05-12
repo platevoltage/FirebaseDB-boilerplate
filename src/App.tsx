@@ -1,6 +1,8 @@
+import { useState } from 'react'; 
 import { initializeApp } from "firebase/app";
 import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"; 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import Login from "./components/Login";
 
 // import { getAnalytics } from "firebase/analytics";
 
@@ -51,20 +53,34 @@ async function addData() {
   }
 }
 
-async function getData() {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-  });
-}
+
 
 function App() {
+  const [ showLogin, setShowLogin ] = useState(false);
+
+  async function getData() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      });
+    } 
+    catch (e: any) {
+      if (e.code === "permission-denied") {
+        setShowLogin(true);
+      } else {
+        console.error(e);
+      }
+    }
+  }
+
   return (
     <div>
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
       {/* <button onClick={createUser}>create user</button> */}
       <button onClick={signIn}>sign in</button>
+      { showLogin && <Login />}
     </div>
   );
 }
