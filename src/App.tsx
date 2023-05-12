@@ -17,27 +17,12 @@ const firebaseConfig = {
   appId: "1:133095410928:web:74a597e73eb02f65678635",
   measurementId: "G-F1N0J6C5H3"
 };
-
 const app = initializeApp(firebaseConfig);
+console.log(app);
+
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
-
 const auth = getAuth();
-
-
-async function signIn() {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, "jgarrettcorbin@gmail.com", "password")
-    const user = userCredential.user;
-    console.log(user);
-  }
-  catch (error: any) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.error(errorCode, errorMessage)
-  }
-
-}
 
 async function addData() {
   // console.log(db);
@@ -66,6 +51,7 @@ function App() {
       });
     } 
     catch (e: any) {
+      console.error(e);
       if (e.code === "permission-denied") {
         setShowLogin(true);
       } else {
@@ -79,8 +65,8 @@ function App() {
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
       {/* <button onClick={createUser}>create user</button> */}
-      <button onClick={signIn}>sign in</button>
-      { showLogin && <Login />}
+      {/* <button onClick={signIn}>sign in</button> */}
+      { showLogin && <Login auth={auth} setShowLogin={setShowLogin}/>}
     </div>
   );
 }
