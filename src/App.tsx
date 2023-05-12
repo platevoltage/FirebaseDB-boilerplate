@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { collection, addDoc, getFirestore } from "firebase/firestore"; 
+import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"; 
 // import { getAnalytics } from "firebase/analytics";
 
 import './App.css';
@@ -32,10 +32,18 @@ async function addData() {
   }
 }
 
+async function getData() {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+  });
+}
+
 function App() {
   return (
     <div>
       <button onClick={addData}>add data</button>
+      <button onClick={getData}>get data</button>
     </div>
   );
 }
