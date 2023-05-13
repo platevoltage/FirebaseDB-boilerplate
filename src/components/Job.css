@@ -1,4 +1,12 @@
 #job {
     border: 1px solid #ffffff;
     margin: 1em;
+    padding: .5em;
+}
+
+input:disabled {
+    background-color: #00000000;
+    color: #ffffff;
+    font-size: 1em;
+    border: none;
 }
