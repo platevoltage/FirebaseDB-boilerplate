@@ -1,13 +1,10 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { initializeApp } from "firebase/app";
 import { collection, doc, addDoc, getDocs, updateDoc, deleteDoc, getFirestore } from "firebase/firestore"; 
 import { getAuth } from "firebase/auth";
 import Login from "./components/Login";
-
-// import { getAnalytics } from "firebase/analytics";
-
-import './App.css';
 import JobList from './components/JobList';
+import './App.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjBwVlOOdgvoqrQQmN8yJn5pvbx14uJ44",
@@ -19,9 +16,6 @@ const firebaseConfig = {
   measurementId: "G-F1N0J6C5H3"
 };
 const app = initializeApp(firebaseConfig);
-console.log(app);
-
-// const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth();
 
@@ -85,6 +79,13 @@ function App() {
       }
     }
   }
+
+  useEffect(() => {
+    getData();
+  },[]);
+  useEffect(() => {
+    getData();
+  },[showLogin]);
 
   return (
     <div>
