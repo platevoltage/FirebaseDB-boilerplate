@@ -30,7 +30,7 @@ async function addData() {
   try {
     const docRef = await addDoc(collection(db, "invoices"), {
       client: "Client 2",
-      date: new Date(),
+      date: Date.now(),
       bill: 100.00
     });
     console.log("Document written with ID: ", docRef.id);
@@ -44,7 +44,7 @@ async function addData() {
 
 function App() {
   const [ showLogin, setShowLogin ] = useState(false);
-  const [ data, setData ] = useState({});
+  const [ data, setData ] = useState<object[]>([]);
 
   async function getData() {
     try {
