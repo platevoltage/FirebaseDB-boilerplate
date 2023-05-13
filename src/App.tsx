@@ -1,6 +1,6 @@
 import { useState } from 'react'; 
 import { initializeApp } from "firebase/app";
-import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"; 
+import { collection, doc, addDoc, getDocs, deleteDoc, getFirestore } from "firebase/firestore"; 
 import { getAuth } from "firebase/auth";
 import Login from "./components/Login";
 
@@ -40,6 +40,15 @@ async function addData() {
   }
 }
 
+async function deleteData(id: string) {
+  try {
+    await deleteDoc(doc(db, "invoices", id));
+    console.log("Document written with ID: ", id);
+  } 
+  catch (e) {
+    console.error("Error deleting document: ", e);
+  }
+}
 
 
 function App() {
@@ -52,7 +61,7 @@ function App() {
       const array: object[] = [];
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-        array.push(doc.data());
+        array.push({...doc.data(), id: doc.id});
         setData(array);
       });
     } 
@@ -70,6 +79,7 @@ function App() {
     <div>
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
+
       {/* <button onClick={createUser}>create user</button> */}
       {/* <button onClick={signIn}>sign in</button> */}
       { showLogin && <Login auth={auth} setShowLogin={setShowLogin}/>}
@@ -77,7 +87,7 @@ function App() {
 
       <br></br>
       <br></br>
-      <JobList data={data} />
+      <JobList data={data} methods={{deleteData}}/>
     </div>
   );
 }
