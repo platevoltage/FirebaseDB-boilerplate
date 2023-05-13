@@ -1,6 +1,6 @@
 import { useState } from 'react'; 
 import { initializeApp } from "firebase/app";
-import { collection, doc, addDoc, getDocs, deleteDoc, getFirestore } from "firebase/firestore"; 
+import { collection, doc, addDoc, getDocs, updateDoc, deleteDoc, getFirestore } from "firebase/firestore"; 
 import { getAuth } from "firebase/auth";
 import Login from "./components/Login";
 
@@ -50,6 +50,17 @@ async function deleteData(id: string) {
   }
 }
 
+async function updateData(id: string, newData: object) {
+  // console.log(db);
+  try {
+    await updateDoc(doc(db, "invoices", id), newData);
+    console.log("Document updated with ID: ", id);
+  } 
+  catch (e) {
+    console.error("Error updating document: ", e);
+  }
+}
+
 
 function App() {
   const [ showLogin, setShowLogin ] = useState(false);
@@ -79,6 +90,7 @@ function App() {
     <div>
       <button onClick={addData}>add data</button>
       <button onClick={getData}>get data</button>
+      
 
       {/* <button onClick={createUser}>create user</button> */}
       {/* <button onClick={signIn}>sign in</button> */}
@@ -87,7 +99,7 @@ function App() {
 
       <br></br>
       <br></br>
-      <JobList data={data} methods={{deleteData}}/>
+      <JobList data={data} methods={{deleteData, updateData}}/>
     </div>
   );
 }

@@ -6,6 +6,12 @@ interface Props {
     methods: any;
 }
 
+const newData = {
+    client: "Client 3",
+    date: Date.now(),
+    bill: 200.00
+}
+
 export default function Job({job, methods}: Props) {
     return (
         <div id="job">
@@ -14,7 +20,7 @@ export default function Job({job, methods}: Props) {
             <p>Bill: ${job.bill.toFixed(2)}</p>
   
             <button onClick={() => methods.deleteData(job.id)}>Delete</button>
-            <button>Edit</button>
+            <button onClick={() => methods.updateData(job.id, newData)}>Edit</button>
         </div>
     )
 }
