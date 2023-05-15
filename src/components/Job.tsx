@@ -6,23 +6,41 @@ import { createPortal } from 'react-dom';
 interface Props {
     job: any;
     methods: any;
+    newJob? : boolean;
 }
 
-export default function Job({job, methods}: Props) {
+export default function Job({job, methods, newJob}: Props) {
     const [ client, setClient ] = useState(job.client);
     const [ date, setDate ] = useState(new Date(job.date).toLocaleDateString());
     const [ bill, setBill ] = useState(job.bill.toFixed(2));
-    const [ editMode, setEditMode ] = useState(false);
+    const [ editMode, setEditMode ] = useState(newJob);
     const [container, setContainer] = useState<HTMLDivElement|null>(null);
     const newWindow = useRef<Window>(null);
 
     function handleUpdate() {
-        methods.updateData(job.id, {
-            client,
-            date: new Date(date).getTime(),
-            bill: parseFloat(bill)
-        });
-        setEditMode(false);
+        try {
+            methods.updateData(job.id, {
+                client,
+                date: new Date(date).getTime(),
+                bill: parseFloat(bill)
+            });
+            setEditMode(false);
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function handleAdd() {
+        try {
+            methods.addData({
+                client,
+                date: new Date(date).getTime(),
+                bill: parseFloat(bill)
+            });
+            methods.setCreateJob(false);
+        } catch(e) {
+            console.error(e);
+        }
     }
 
     function handleInvoice() {
@@ -38,13 +56,14 @@ export default function Job({job, methods}: Props) {
           let newWindowCurrent = newWindow.current;
           newWindowCurrent = window.open(
             "",
-            "_blank"
+            "_blank",
+            ""
           );
           // Append container
           if (newWindowCurrent) {
               newWindowCurrent.document.body.appendChild(container);          
               newWindowCurrent.document.body.style.margin = "0";    
-              newWindowCurrent.document.title = `Invoice for ${job.client}`;        
+              newWindowCurrent.document.title = `Invoice for ${job.client}`;      
           }
     
           // Return cleanup function
@@ -71,8 +90,8 @@ export default function Job({job, methods}: Props) {
 
             { editMode ?
                 <>
-                    <button onClick={() => setEditMode(false)}>Cancel</button>
-                    <button onClick={handleUpdate}>Save</button>
+                    <button onClick={() => newJob ?  methods.setCreateJob(false) : setEditMode(false)}>Cancel</button>
+                    <button onClick={newJob ? handleAdd : handleUpdate}>Save</button>
                 </> :
                 <>
                     <button onClick={() => methods.deleteData(job.id)}>Delete</button>
