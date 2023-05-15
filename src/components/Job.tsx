@@ -38,18 +38,19 @@ export default function Job({job, methods}: Props) {
           let newWindowCurrent = newWindow.current;
           newWindowCurrent = window.open(
             "",
-            "_blank"
+            "blank"
           );
           // Append container
           if (newWindowCurrent) {
-            newWindowCurrent.document.body.appendChild(container);          
-            newWindowCurrent.document.body.style.margin = "0";
+              newWindowCurrent.document.body.appendChild(container);          
+              newWindowCurrent.document.body.style.margin = "0";    
+              newWindowCurrent.document.title = `Invoice for ${job.client}`;        
           }
     
           // Return cleanup function
-          return () =>  {
-              if (newWindowCurrent) newWindowCurrent.close();
-          }
+        //   return () =>  {
+        //       if (newWindowCurrent) newWindowCurrent.close();
+        //   }
         }
       }, [container]);
 
