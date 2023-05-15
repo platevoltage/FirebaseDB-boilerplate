@@ -14,10 +14,9 @@ const mainStyle = {
 }
 
 
+
 export default function Invoice({job}: Props) {
-    useEffect(() => {
-        
-    },[]);
+
     return (
         <main style={mainStyle}>
             <h1>INVOICE</h1>

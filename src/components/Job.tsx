@@ -38,7 +38,7 @@ export default function Job({job, methods}: Props) {
           let newWindowCurrent = newWindow.current;
           newWindowCurrent = window.open(
             "",
-            "blank"
+            "_blank"
           );
           // Append container
           if (newWindowCurrent) {
