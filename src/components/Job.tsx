@@ -27,8 +27,8 @@ export default function Job({job, methods}: Props) {
 
     function handleInvoice() {
         // Create container element on client-side
-      console.log("test")
-      setContainer(document.createElement("div"));
+        const element = document.createElement("div");
+        setContainer(element);
     }
 
     useEffect(() => {
@@ -41,14 +41,14 @@ export default function Job({job, methods}: Props) {
             "_blank"
           );
           // Append container
-          newWindowCurrent?.document.body.appendChild(container);
-    
-          // Save reference to window for cleanup
-          const curWindow = newWindow.current;
+          if (newWindowCurrent) {
+            newWindowCurrent.document.body.appendChild(container);          
+            newWindowCurrent.document.body.style.margin = "0";
+          }
     
           // Return cleanup function
           return () =>  {
-              if (curWindow) curWindow.close();
+              if (newWindowCurrent) newWindowCurrent.close();
           }
         }
       }, [container]);
