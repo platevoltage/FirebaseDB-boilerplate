@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './Job.css'
+import Invoice from './Invoice';
+import { createPortal } from 'react-dom';
 
 interface Props {
     job: any;
@@ -11,6 +13,8 @@ export default function Job({job, methods}: Props) {
     const [ date, setDate ] = useState(new Date(job.date).toLocaleDateString());
     const [ bill, setBill ] = useState(job.bill.toFixed(2));
     const [ editMode, setEditMode ] = useState(false);
+    const [container, setContainer] = useState<HTMLDivElement|null>(null);
+    const newWindow = useRef<Window>(null);
 
     function handleUpdate() {
         methods.updateData(job.id, {
@@ -20,6 +24,34 @@ export default function Job({job, methods}: Props) {
         });
         setEditMode(false);
     }
+
+    function handleInvoice() {
+        // Create container element on client-side
+      console.log("test")
+      setContainer(document.createElement("div"));
+    }
+
+    useEffect(() => {
+        // When container is ready
+        if (container && newWindow) {
+          // Create window
+          let newWindowCurrent = newWindow.current;
+          newWindowCurrent = window.open(
+            "",
+            "_blank"
+          );
+          // Append container
+          newWindowCurrent?.document.body.appendChild(container);
+    
+          // Save reference to window for cleanup
+          const curWindow = newWindow.current;
+    
+          // Return cleanup function
+          return () =>  {
+              if (curWindow) curWindow.close();
+          }
+        }
+      }, [container]);
 
     return (
         <div id="job">
@@ -44,9 +76,12 @@ export default function Job({job, methods}: Props) {
                 <>
                     <button onClick={() => methods.deleteData(job.id)}>Delete</button>
                     <button onClick={() => setEditMode(true)}>Edit</button>
+                    <button onClick={handleInvoice}>Invoice</button>
                 </> 
 
             }
+
+            {container && createPortal(<Invoice job={job}/>, container)}
         </div>
     )
 }
